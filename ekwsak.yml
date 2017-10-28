@@ -1,0 +1,32 @@
+---
+- hosts: serwery_sak
+  become: yes
+  tasks:
+    - name: Instalacja dockera
+      yum:
+        name: docker-1.12.6
+        state: present
+    - name: Instalacja docker-compose
+      yum:
+        name: docker-compose
+        state: absent
+    - name: Uruchomienie uslugi docker
+      systemd: name=docker state=started enabled=yes
+    - name: "Zalozenie katalogu bazowego {{ katalog_bazowy }}"
+      file: path={{katalog_bazowy}} owner={{wlasciciel}} group={{wlasciciel}} state=directory
+    - name: "Utworzenie pliku {{ katalog_bazowy }}/docker-compose.yml"
+      template:
+        src: docker-compose.template.yml
+        dest: "{{ katalog_bazowy}}/docker-compose.yml"
+        owner: "{{wlasciciel}}"
+        group: "{{wlasciciel}}"
+    - name: "Zalozenie katalogu na dane jenkinsa {{ katalog_bazowy }}/jenkins"
+      file: path="{{ katalog_bazowy }}/jenkins" owner={{wlasciciel}} group={{wlasciciel}} state=directory
+    - name: "Zalozenie katalogu na dane gitlaba {{ katalog_bazowy }}/gitlab"
+      file: path="{{ katalog_bazowy }}/gitlab" owner={{wlasciciel}} group={{wlasciciel}} state=directory
+    - name: "Zalozenie katalogu na dane artifactory {{ katalog_bazowy }}/artifactory"
+      file: path="{{ katalog_bazowy }}/artifactory" owner={{wlasciciel}} group={{wlasciciel}} state=directory
+    - name: "Zalozenie katalogu na dane mysql {{ katalog_bazowy }}/mysql"
+      file: path="{{ katalog_bazowy }}/mysql" owner={{wlasciciel}} group={{wlasciciel}} state=directory
+    - name: "Zalozenie katalogu na dane sonarqube {{ katalog_bazowy }}/sonar"
+      file: path="{{ katalog_bazowy }}/sonar" owner={{wlasciciel}} group={{wlasciciel}} state=directory
