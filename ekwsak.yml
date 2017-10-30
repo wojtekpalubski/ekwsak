@@ -6,10 +6,14 @@
       yum:
         name: docker-1.12.6
         state: present
+    - name: Instalacja repozytorium epel
+      yum: name=epel-release state=present
+    - name: instalacja python-pip
+      yum: name=python-pip
     - name: Instalacja docker-compose
-      yum:
+      pip:
         name: docker-compose
-        state: absent
+        state: present
     - name: Uruchomienie uslugi docker
       systemd: name=docker state=started enabled=yes
     - name: "Zalozenie katalogu bazowego {{ katalog_bazowy }}"
@@ -20,6 +24,14 @@
         dest: "{{ katalog_bazowy}}/docker-compose.yml"
         owner: "{{wlasciciel}}"
         group: "{{wlasciciel}}"
+    - name: "Utworzenie pliku {{ katalog_bazowy }}/.env"
+      template:
+        src: env.template
+        dest: "{{ katalog_bazowy}}/.env"
+        owner: "{{wlasciciel}}"
+        group: "{{wlasciciel}}"
+    - name: Sprawdzenie poprawnosci docker-compose.yml
+      shell: "cd {{ katalog_bazowy }}; docker-compose config"
     - name: "Zalozenie katalogu na dane jenkinsa {{ katalog_bazowy }}/jenkins"
       file: path="{{ katalog_bazowy }}/jenkins" owner={{wlasciciel}} group={{wlasciciel}} state=directory
     - name: "Zalozenie katalogu na dane gitlaba {{ katalog_bazowy }}/gitlab"
@@ -30,3 +42,19 @@
       file: path="{{ katalog_bazowy }}/mysql" owner={{wlasciciel}} group={{wlasciciel}} state=directory
     - name: "Zalozenie katalogu na dane sonarqube {{ katalog_bazowy }}/sonar"
       file: path="{{ katalog_bazowy }}/sonar" owner={{wlasciciel}} group={{wlasciciel}} state=directory
+    - name: Otwarcie portu 80 dla gitlaba
+      firewalld: port=80/tcp permanent=true state=enabled
+    - name: Otwarcie portu 443 dla gitlaba
+      firewalld: port=443/tcp permanent=true state=enabled
+    - name: Otwarcie portu 8082 dla gitlaba
+      firewalld: port=8082/tcp permanent=true state=enabled
+    - name: Otwarcie portu 8080 dla jenkinsa
+      firewalld: port=8080/tcp permanent=true state=enabled
+    - name: Otwarcie portu 50000 dla jenkinsa
+      firewalld: port=50000/tcp permanent=true state=enabled
+    - name: Otwarcie portu 8081 dla artifactory
+      firewalld: port=8081/tcp permanent=true state=enabled 
+    - name: Otwarcie portu 9000 dla sonarqube
+      firewalld: port=9000/tcp permanent=true state=enabled
+    - name: Uruchomienie firewalld
+      systemd: name=firewalld state=started enabled=yes
