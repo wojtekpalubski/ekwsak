@@ -1,5 +1,5 @@
 sudo yum install -y git ansible
-sudo hostnamectl set-hostname ekwsak
-ping ekwsak
+sudo hostnamectl set-hostname tstsak
+ping tstsak
 ssh-keygen
-ssh-copy-id ekwsak
+ssh-copy-id tstsak
