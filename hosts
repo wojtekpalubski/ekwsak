@@ -4,7 +4,7 @@ tstsak
 [serwery_sak:vars]
 
 # katalog gdzie ma byc umieszczony docker-compose.yml
-katalog_bazowy=/home/ekwsak/sak 
+katalog_bazowy=/home/tstsak/sak 
 
 # wlasciciel instalacji
 wlasciciel=vagrant
