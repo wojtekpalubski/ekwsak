@@ -10,10 +10,12 @@
       yum: name=epel-release state=present
     - name: instalacja python-pip
       yum: name=python-pip
-    - name: Instalacja docker-compose
+    - name: Instalacja docker-compose przez pip
       pip:
         name: docker-compose
         state: present
+    - name: Instalacja docker-compose z epel
+      yum: name=docker-compose state=present
     - name: Uruchomienie uslugi docker
       systemd: name=docker state=started enabled=yes
     - name: "Zalozenie katalogu bazowego {{ katalog_bazowy }}"
@@ -37,9 +39,9 @@
     - name: "Zalozenie katalogu na dane gitlaba {{ katalog_bazowy }}/gitlab"
       file: path="{{ katalog_bazowy }}/gitlab" owner={{wlasciciel}} group={{wlasciciel}} state=directory
     - name: "Zalozenie katalogu na dane artifactory {{ katalog_bazowy }}/artifactory"
-      file: path="{{ katalog_bazowy }}/artifactory" owner={{wlasciciel}} group={{wlasciciel}} state=directory
+      file: path="{{ katalog_bazowy }}/artifactory" owner=1030 group=1030 state=directory
     - name: "Zalozenie katalogu na dane mysql {{ katalog_bazowy }}/mysql"
-      file: path="{{ katalog_bazowy }}/mysql" owner={{wlasciciel}} group={{wlasciciel}} state=directory
+      file: path="{{ katalog_bazowy }}/mysql" owner=999 group=999 state=directory
     - name: "Zalozenie katalogu na dane sonarqube {{ katalog_bazowy }}/sonar"
       file: path="{{ katalog_bazowy }}/sonar" owner={{wlasciciel}} group={{wlasciciel}} state=directory
     - name: Otwarcie portu 80 dla gitlaba
