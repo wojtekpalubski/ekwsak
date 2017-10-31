@@ -5,5 +5,6 @@ ansible-playbook ekwsak.yml --syntax-check
 cd /home/tstsak/sak
 sudo docker-compose pull
 sudo docker images
+sudo systemctl restart docker
 sudo docker-compose up
 sudo docker ps
