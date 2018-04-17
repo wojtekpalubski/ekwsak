@@ -1,7 +1,7 @@
 version: '2'
 services:
   gitlab:
-    image: docker.io/gitlab/gitlab-ce:9.4.5-ce.0
+    image: docker.io/gitlab/gitlab-ce:10.6.3-ce.0
     restart: always
     hostname: '172.25.117.130'
     ports:
@@ -13,7 +13,7 @@ services:
       - ${BASE}/gitlab/log:/var/log/gitlab:Z
       - ${BASE}/gitlab/opt:/var/opt/gitlab:Z
   jenkins:
-    image: docker.io/jenkins/jenkins:2.60.2
+    image: docker.io/jenkins/jenkins:2.115
     restart: always
     ports:
       - "8080:8080"
@@ -21,7 +21,7 @@ services:
     volumes:
       - "${BASE}/jenkins:/var/jenkins_home:Z"
   artifactory:
-    image: docker.bintray.io/jfrog/artifactory-oss:5.4.6
+    image: docker.bintray.io/jfrog/artifactory-oss:5.10.1
     restart: always
     ports:
       - "8081:8081"
@@ -41,7 +41,7 @@ services:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
   sonarqube:
-    image: sonarqube:6.5
+    image: sonarqube:7.0
     restart: always
     links:
       - mysql
@@ -54,3 +54,4 @@ services:
       - SONARQUBE_JDBC_USERNAME=${MYSQL_USER}
       - SONARQUBE_JDBC_PASSWORD=${MYSQL_PASSWORD}
       - SONARQUBE_JDBC_URL=jdbc:mysql://mysql:3306/${MYSQL_DATABASE}?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance&useSSL=false
+
